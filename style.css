@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+html {
+    background-color: black;
+}
+
+body {
+    background: url("./assets/starfield.png");
+    background-size: cover;
+    background-color: #0b1927;
+    margin-left: 20%;
+    margin-right: 20%;
+    padding: 10%;
+    padding-top: 5%;
+    
+}
+
+h1 {
+    text-align: center;
+    font-family: "Press Start 2P", Consolas;
+    color: white;
+    font-size: 30px;
+}
+
+p {
+    font-family: "Press Start 2P", Consolas;
+    color: white;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: center;
+}
+
+a {
+    color: #F3B141;
+    text-decoration: none;
+}
+a:hover {
+    color: #00FF00;
+}
+
+#rocket-patrol-game {
+    text-align: center;
+    align-content: center;
+}
