@@ -5,20 +5,17 @@ class Rocket extends Phaser.GameObjects.Sprite {
         
         // add sprite to scene bc it doesn't automatically do that
         scene.add.existing(this);
-        this.isFiring = false;
         this.moveSpeed = 2;
         this.sfxRocket = scene.sound.add("sfx_rocket", {volume: 0.4}); // but still need to bind to a key
     }
     
     update() {
         // left/right movement
-        if(!this.isFiring) {
-            // as long as rocket is within bounds, changing position for movement
-            if(keyLEFT.isDown && this.x >= borderUISize + this.width) {
-                this.x -= this.moveSpeed;
-            } else if (keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width) {
-                this.x += this.moveSpeed;
-            }
+        // as long as rocket is within bounds, changing position for movement
+        if(keyLEFT.isDown && this.x >= borderUISize + this.width) {
+            this.x -= this.moveSpeed;
+        } else if (keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width) {
+            this.x += this.moveSpeed;
         }
         
         // fire button
