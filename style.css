@@ -5,7 +5,7 @@ html {
 }
 
 body {
-    background: url("./assets/starfield.png");
+    background: url("./assets/starfield-stars.png");
     background-size: cover;
     background-color: #0b1927;
     margin-left: 20%;

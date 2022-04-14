@@ -9,12 +9,20 @@ class Menu extends Phaser.Scene {
         this.load.audio("sfx_explosion", "./assets/explosion.wav");
         this.load.audio("sfx_rocket", "./assets/rocketShoot.wav");
         this.load.audio("bg_music", "./assets/04All-of-Us.mp3")
+
+        // load title images
+        this.load.image("title", "./assets/title.png");
+        this.load.image("spaceship", "./assets/spaceship.png");
+        this.load.image("starfield-bg", "./assets/starfield-bg.png");
+        this.load.image("starfield-stars", "./assets/starfield-stars.png");
+        this.load.image("starfield-overlay", "./assets/starfield-overlay.png");
+
     }
 
     create() {
         let menuConfig = {
             fontFamily: "Consolas",
-            fontSize: "28px",
+            fontSize: "20px",
             backgroundColor: "#F3B141",
             color: "#843605",
             align: "center",
@@ -28,15 +36,29 @@ class Menu extends Phaser.Scene {
             }
         }
 
+        // audio
         this.music = this.sound.add("bg_music", {volume: 0.5});
         this.music.play();
 
+        // background
+        this.starfieldBG = this.add.tileSprite(0, 0, 640, 480, "starfield-bg").setOrigin(0, 0);
+        this.starfieldOverlay = this.add.tileSprite(0, 0, 640, 480, "starfield-overlay").setOrigin(0, 0);
+        this.starfieldStars = this.add.tileSprite(0, 0, 640, 480, "starfield-stars").setOrigin(0, 0);
+
+        // moving spaceships
+        this.ship01 = this.add.image(game.config.width, Phaser.Math.Between(0, game.config.height), "spaceship").setOrigin(0.5);
+        this.ship02 = this.add.image(game.config.width+ borderUISize, Phaser.Math.Between(0, game.config.height), "spaceship").setOrigin(0.5);
+
+        // menu logo
+        this.add.sprite(game.config.width/2, borderPadding + borderUISize*4, "title").setOrigin(0.5);
+
         // show menu text
-        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, "ROCKET PATROL", menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2, "Use ← → keys to move & (F) to fire", menuConfig).setOrigin(0.5)
         menuConfig.backgroundColor = "#00FF00";
         menuConfig.color = "#000";
         this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, "Press ← for Novice or → for Expert", menuConfig).setOrigin(0.5);
+
+
 
         // define menu keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -48,7 +70,7 @@ class Menu extends Phaser.Scene {
             // easy mode
             game.settings = {
                 spaceshipSpeed: 3,
-                gameTimer: 60000
+                gameTimer: 5000
             }
             this.sound.play("sfx_select");
             this.scene.start("playScene");
@@ -63,5 +85,24 @@ class Menu extends Phaser.Scene {
             this.sound.play("sfx_select");
             this.scene.start("playScene");
         }
+
+        // moving spaceship
+        this.ship01.x -= 2;
+        if(this.ship01.x <= 0 - this.ship01.width) {
+            this.ship01.x = game.config.width; // essentially resets x position
+            this.ship01.y = Phaser.Math.Between(0, game.config.height);
+        };
+        this.clock = this.time.delayedCall(2000, () => {
+            this.ship02.x -= 2
+        });
+        if(this.ship02.x <= 0 - this.ship02.width) {
+            this.ship02.x = game.config.width; // essentially resets x position
+            this.ship02.y = Phaser.Math.Between(0, game.config.height);
+        };
+
+        // parallax bg
+        this.starfieldBG.tilePositionX -= 2;
+        this.starfieldStars.tilePositionX -= 1;
+        this.starfieldOverlay.tilePositionX -= 3; 
     }
 };
