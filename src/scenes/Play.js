@@ -24,13 +24,17 @@ class Play extends Phaser.Scene {
         this.starfieldOverlay = this.add.tileSprite(0, 0, 640, 480, "starfield-overlay").setOrigin(0, 0);
         this.starfieldStars = this.add.tileSprite(0, 0, 640, 480, "starfield-stars").setOrigin(0, 0);
         
-        // green UI background
-        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
+        // UI frame
+        this.frame = this.add.rectangle(borderUISize+borderPadding, borderUISize + borderPadding, game.config.width-borderUISize*2-borderPadding*2, borderUISize * 2).setOrigin(0, 0);
+        this.frame.isStroked = true;
+        this.frame.strokeColor = -1;
+        this.frame.lineWidth = 3;
 
         // add spaceship (x3)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, "spaceship", 0, 30).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, "spaceship", 0, 20).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderUISize*4, "spaceship", 0, 10).setOrigin(0, 0);
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, "spaceship", 0, 30, 3000).setOrigin(0, 0);
+        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, "spaceship", 0, 20, 1500).setOrigin(0, 0);
+        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderUISize*4, "spaceship", 0, 10, 500).setOrigin(0, 0);
+
 
         // white borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
@@ -51,6 +55,7 @@ class Play extends Phaser.Scene {
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
@@ -68,8 +73,7 @@ class Play extends Phaser.Scene {
         let scoreConfig = {
             fontFamily: "Courier",
             fontSize: "28px",
-            backgroundColor: "#F3B141",
-            color: "#843605",
+            color: "white",
             align: "center",
             padding: {
                 top: 5,
@@ -87,7 +91,7 @@ class Play extends Phaser.Scene {
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.add.text(game.config.width/2, game.config.height/2, "GAME OVER", scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, "Press (R) to restart", scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, "Press (R) to restart\nPress (M) to go back to Menu", scoreConfig).setOrigin(0.5);
             this.gameOver = true;
             highScore = this.p1Score;
         }, null, this);
@@ -101,6 +105,10 @@ class Play extends Phaser.Scene {
         // check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
+        }
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyM)) {
+            music.stop();
+            this.scene.start("menuScene");
         }
 
         // parallax bg
@@ -151,7 +159,7 @@ class Play extends Phaser.Scene {
         // temp hide ship
         ship.alpha = 0;
 
-        this.cameras.main.shake(100);
+        this.cameras.main.shake(50);
 
         // create explosion sprite at ship's position
         let boom = this.add.sprite(ship.x, ship.y, "explosion").setOrigin(0, 0);
@@ -166,5 +174,8 @@ class Play extends Phaser.Scene {
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
         this.sound.play("sfx_explosion", {volume: 0.4});
+
+        // add to time
+        this.clock.delay += ship.time;
     }
 };

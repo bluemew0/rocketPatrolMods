@@ -23,12 +23,13 @@ class Menu extends Phaser.Scene {
         let menuConfig = {
             fontFamily: "Consolas",
             fontSize: "20px",
-            backgroundColor: "#F3B141",
-            color: "#843605",
+            color: "white",
             align: "center",
             padding: {
                 top: 5,
-                bottom: 5
+                bottom: 5,
+                left: 10,
+                right: 10
             },
             fixedWidth: 0,
             wordWrap: {
@@ -37,9 +38,9 @@ class Menu extends Phaser.Scene {
         }
 
         // audio
-        this.music = this.sound.add("bg_music", {volume: 0.5});
-        this.music.play();
-
+        music = this.sound.add("bg_music", {volume: 0.5});
+        music.play();
+        
         // background
         this.starfieldBG = this.add.tileSprite(0, 0, 640, 480, "starfield-bg").setOrigin(0, 0);
         this.starfieldOverlay = this.add.tileSprite(0, 0, 640, 480, "starfield-overlay").setOrigin(0, 0);
@@ -53,11 +54,14 @@ class Menu extends Phaser.Scene {
         this.add.sprite(game.config.width/2, borderPadding + borderUISize*4, "title").setOrigin(0.5);
 
         // show menu text
-        this.add.text(game.config.width/2, game.config.height/2, "Use ← → keys to move & (F) to fire", menuConfig).setOrigin(0.5)
-        menuConfig.backgroundColor = "#00FF00";
-        menuConfig.color = "#000";
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, "Press ← for Novice or → for Expert", menuConfig).setOrigin(0.5);
+        this.menuText = this.add.text(game.config.width/2, game.config.height/3*2, "Use ← → keys to move & (F) to fire", menuConfig).setOrigin(0.5)
+        this.add.text(game.config.width/2, game.config.height/3*2 + borderUISize + borderPadding, "Press ← for Novice or → for Expert", menuConfig).setOrigin(0.5);
 
+        // menu box
+        this.frame = this.add.rectangle(game.config.width/2, game.config.height/2+borderUISize*3, this.menuText.width, game.config.height/4).setOrigin(0.5);
+        this.frame.isStroked = true;
+        this.frame.strokeColor = -1;
+        this.frame.lineWidth = 3;
 
 
         // define menu keys
