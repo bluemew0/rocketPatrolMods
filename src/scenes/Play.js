@@ -8,13 +8,14 @@ class Play extends Phaser.Scene {
         //load.image(name, URL)
         this.load.image("rocket", "./assets/rocket.png");
         this.load.image("spaceship", "./assets/spaceship.png");
+        this.load.image("speedship", "./assets/speedship.png");
         this.load.image("starfield-bg", "./assets/starfield-bg.png");
         this.load.image("starfield-stars", "./assets/starfield-stars.png");
         this.load.image("starfield-overlay", "./assets/starfield-overlay.png");
 
         //load.spritesheet(name, URL, {width, height, start, end})
-        this.load.spritesheet("explosion", "./assets/explosion-sheet.png", {frameWidth: 64, frameHeight: 64, startFrame: 0, endFrame: 10});
-        this.load.spritesheet("animated-spaceship", "./assets/spaceship-sheet.png", {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 5});
+        this.load.spritesheet("spaceshipExplosion", "./assets/explosion-sheet.png", {frameWidth: 64, frameHeight: 64, startFrame: 0, endFrame: 10});
+        this.load.spritesheet("speedshipExplosion", "./assets/speedshipExplosion-sheet.png", {frameWidth: 64, frameHeight: 64, startFrame: 0, endFrame: 10});
     }
 
     create() {
@@ -35,35 +36,21 @@ class Play extends Phaser.Scene {
         // anims.create(name, # of frames, frame rate)
         // anims.generateFrameNumbers(name of animation, {start, end, first})
         this.anims.create({
-            key: "explode",
-            frames: this.anims.generateFrameNumbers("explosion", {start: 0, end: 10 , first: 0}), 
+            key: "spaceshipExplode",
+            frames: this.anims.generateFrameNumbers("spaceshipExplosion", {start: 0, end: 10 , first: 0}), 
             frameRate: 20
         });
         this.anims.create({
-            key: "flame",
-            frames: this.anims.generateFrameNumbers("animated-spaceship", 
-                {start: 0, end: 5, first: 0}),
-            frameRate: 30
-        })
-
-        // add spaceship (x3)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, "animated-spaceship", 1, 30, 3000).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, "animated-spaceship", 1, 20, 1500).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderUISize*4, "animated-spaceship", 1, 10, 1000).setOrigin(0, 0);
-        this.ship01.anims.play("flame");
-        this.ship02.anims.play("flame");
-        this.ship03.anims.play("flame");
-
-
-        // speedship
-        this.speedshipLoop = this.time.addEvent({
-            delay: 5000,
-            callback: () => {
-                this.speedship = new Speedship(this, game.config.width, Phaser.Math.Between(borderUISize * 3 + borderPadding, borderUISize*4), "spaceship", 0)
-            },
-            loop: true 
+            key: "speedshipExplode",
+            frames: this.anims.generateFrameNumbers("speedshipExplosion", {start: 0, end: 10 , first: 0}), 
+            frameRate: 20
         });
 
+        // add spaceship (x3)
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, "spaceship", 0, 30, 3000).setOrigin(0, 0);
+        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, "spaceship", 0, 20, 1500).setOrigin(0, 0);
+        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderUISize*4, "spaceship", 0, 10, 1000).setOrigin(0, 0);
+        this.speedship01 = new Speedship(this, game.config.width + (game.config.width/2), Phaser.Math.Between(borderUISize*4, borderUISize*6 + borderUISize*4), "speedship", 0).setOrigin(0, 0);
 
         // white borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
@@ -91,14 +78,14 @@ class Play extends Phaser.Scene {
         // initialize and display score
         this.p1Score = 0;
         let scoreConfig = {
-            fontFamily: "Courier",
+            fontFamily: "VT323",
             fontSize: "28px",
             color: "white",
             align: "center"
         };
         let headerConfig = {
-            fontFamily: "Courier",
-            fontSize: "15px",
+            fontFamily: "VT323",
+            fontSize: "20px",
             color: "white"
         };
 
@@ -108,7 +95,7 @@ class Play extends Phaser.Scene {
 
         // high score
         this.add.text(game.config.width - borderUISize*3, borderUISize + borderPadding*2, "HIGH", headerConfig);
-        this.add.text(game.config.width - borderUISize*3 + borderPadding*2, borderUISize + borderPadding*3.5, highScore, scoreConfig);
+        this.add.text(game.config.width - borderUISize*3.5 + borderPadding*2, borderUISize + borderPadding*3.5, highScore, scoreConfig);
 
         this.gameOver = false;
         // 60 sec play clock
@@ -146,23 +133,33 @@ class Play extends Phaser.Scene {
             this.ship01.update();
             this.ship02.update();
             this.ship03.update();
+            this.speedship01.update();
         }
 
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
-            this.timerColor();
+            this.changeTextColor(this.timer);
+            this.changeTextColor(this.scoreLeft);
             this.p1Rocket.reset();
             this.shipExplode(this.ship03);
         }
         if (this.checkCollision(this.p1Rocket, this.ship02)) {
-            this.timerColor();
+            this.changeTextColor(this.timer);
+            this.changeTextColor(this.scoreLeft);
             this.p1Rocket.reset();
             this.shipExplode(this.ship02);
         }
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
-            this.timerColor();
+            this.changeTextColor(this.timer);
+            this.changeTextColor(this.scoreLeft);
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
+        }
+        if (this.checkCollision(this.p1Rocket, this.speedship01)) {
+            this.changeTextColor(this.timer);
+            this.changeTextColor(this.scoreLeft);
+            this.p1Rocket.reset();
+            this.shipExplode(this.speedship01);
         }
         
 
@@ -188,16 +185,28 @@ class Play extends Phaser.Scene {
         // temp hide ship
         ship.alpha = 0;
 
-        this.cameras.main.shake(50);
-
+        this.cameras.main.shake(100, 0.03);
+        let boom
         // create explosion sprite at ship's position
-        let boom = this.add.sprite(ship.x, ship.y, "explosion").setOrigin(0, 0);
-        boom.anims.play("explode");
-        boom.on("animationcomplete", () => {
-            ship.reset();   // resets ship position
-            ship.alpha = 1;    
-            boom.destroy();     // removes explosion sprite
-        })
+        if (ship.texture.key == "spaceship") {
+            boom = this.add.sprite(ship.x, ship.y, "spaceshipExplosion").setOrigin(0, 0);
+            boom.anims.play("spaceshipExplode");
+            boom.on("animationcomplete", () => {
+                ship.reset();   // resets ship position
+                ship.alpha = 1;    
+                boom.destroy();     // removes explosion sprite
+            })
+        }
+        else if (ship.texture.key == "speedship") {
+            boom = this.add.sprite(ship.x, ship.y, "speedshipExplosion").setOrigin(0, 0);
+            boom.anims.play("speedshipExplode");
+            boom.on("animationcomplete", () => {
+                ship.reset();   
+                ship.alpha = 1;    
+                boom.destroy();   
+            })
+        }
+        
         
         // add to score and repaint
         this.p1Score += ship.points;
@@ -208,11 +217,11 @@ class Play extends Phaser.Scene {
         this.clock.delay += ship.time;
     }
 
-    timerColor() {
+    changeTextColor(text) {
         // changes the color of the timer
-        this.timer.setColor("#43EF98");
+        text.setColor("#43EF98");
         this.time.delayedCall(500, () => {
-            this.timer.setColor("white");
+            text.setColor("white");
         })
     }
 };

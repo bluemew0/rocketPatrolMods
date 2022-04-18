@@ -22,7 +22,7 @@ class Menu extends Phaser.Scene {
     create() {
         let menuConfig = {
             fontFamily: "VT323",
-            fontSize: "20px",
+            fontSize: "30px",
             color: "white",
             align: "center",
             padding: {
@@ -56,13 +56,16 @@ class Menu extends Phaser.Scene {
 
         // show menu text
         this.menuText = this.add.text(game.config.width/2, game.config.height/3*2, "Use ← → keys to move & (F) to fire", menuConfig).setOrigin(0.5)
-        this.add.text(game.config.width/2, game.config.height/3*2 + borderUISize + borderPadding, "Press ← for Novice or → for Expert", menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/3*2 + borderUISize + borderPadding, "← Novice", menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/3*2 + borderUISize*2 + borderPadding, "→ Expert", menuConfig).setOrigin(0.5);
+        this.add.text(borderPadding, game.config.height-(borderUISize+borderPadding), "HIGH: "+highScore, menuConfig);
 
-        // menu box
+        /* menu box
         this.frame = this.add.rectangle(game.config.width/2, game.config.height/2+borderUISize*3, this.menuText.width, game.config.height/4).setOrigin(0.5);
         this.frame.isStroked = true;
         this.frame.strokeColor = -1;
         this.frame.lineWidth = 3;
+        */
 
 
         // define menu keys
@@ -75,7 +78,8 @@ class Menu extends Phaser.Scene {
             // easy mode
             game.settings = {
                 spaceshipSpeed: 3,
-                gameTimer: 5000
+                speedshipSpeed: 4,
+                gameTimer: 60000
             }
             this.sound.play("sfx_select");
             this.scene.start("playScene");
@@ -85,6 +89,7 @@ class Menu extends Phaser.Scene {
             // hard mode
             game.settings = {
                 spaceshipSpeed: 4,
+                speedshipSpeed: 5,
                 gameTimer: 45000
             }
             this.sound.play("sfx_select");

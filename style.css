@@ -1,10 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-@font-face {
-    font-family: "Press Start 2P";
-    src: url("./assets/PressStart2P-Regular.ttf")
-}
-
 html {
     background-color: black;
 }
@@ -37,11 +32,11 @@ p {
 }
 
 a {
-    color: #F3B141;
+    color: #ffc860;
     text-decoration: none;
 }
 a:hover {
-    color: #00FF00;
+    color: #e15d5d;
 }
 
 #rocket-patrol-game {

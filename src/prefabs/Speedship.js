@@ -4,7 +4,7 @@ class Speedship extends Phaser.GameObjects.Sprite {
         scene.add.existing(this); // add to existing scene
         this.points = 80; // each ship has a different point value based on height
         this.time = 5000;
-        this.moveSpeed = 4; // movement by pixels per frame
+        this.moveSpeed = game.settings.speedshipSpeed; // movement by pixels per frame
   
     }
 
@@ -13,11 +13,13 @@ class Speedship extends Phaser.GameObjects.Sprite {
         this.x -= this.moveSpeed;
         // wrap around from left edge to right edge
         if(this.x <= 0 - this.width) {
-            this.x = game.config.width; // essentially resets x position
+            this.x = game.config.width+(game.config.width/2); // essentially resets x position
+            this.y = Phaser.Math.Between(borderUISize*4, borderUISize*6 + borderUISize*4);
         } 
     }
 
     reset() {
-        this.x = game.config.width;
+        this.x = game.config.width+(game.config.width/2);
+        this.y = Phaser.Math.Between(borderUISize*4, borderUISize*6 + borderUISize*4);
     }
 };
