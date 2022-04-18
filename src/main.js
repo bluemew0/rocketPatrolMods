@@ -1,4 +1,9 @@
 /*
+Name: Ashley Lu
+Project Title: Modded Rocket Patrol
+Date: 04.18.2022
+Time for Completion: 6+ hours (code), 4+ hours (art)
+
 MODS
 - tracks a high score that persists across scenes (5)
 - copyright free background music (5)
