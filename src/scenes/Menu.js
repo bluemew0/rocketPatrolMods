@@ -21,7 +21,7 @@ class Menu extends Phaser.Scene {
 
     create() {
         let menuConfig = {
-            fontFamily: "Consolas",
+            fontFamily: "VT323",
             fontSize: "20px",
             color: "white",
             align: "center",
@@ -49,6 +49,7 @@ class Menu extends Phaser.Scene {
         // moving spaceships
         this.ship01 = this.add.image(game.config.width, Phaser.Math.Between(0, game.config.height), "spaceship").setOrigin(0.5);
         this.ship02 = this.add.image(game.config.width+ borderUISize, Phaser.Math.Between(0, game.config.height), "spaceship").setOrigin(0.5);
+        this.ship03 = this.add.image(game.config.width+ borderUISize, Phaser.Math.Between(0, game.config.height), "spaceship").setOrigin(0.5);
 
         // menu logo
         this.add.sprite(game.config.width/2, borderPadding + borderUISize*4, "title").setOrigin(0.5);
@@ -102,6 +103,13 @@ class Menu extends Phaser.Scene {
         if(this.ship02.x <= 0 - this.ship02.width) {
             this.ship02.x = game.config.width; // essentially resets x position
             this.ship02.y = Phaser.Math.Between(0, game.config.height);
+        };
+        this.clock = this.time.delayedCall(3000, () => {
+            this.ship03.x -= 2
+        });
+        if(this.ship03.x <= 0 - this.ship03.width) {
+            this.ship03.x = game.config.width; // essentially resets x position
+            this.ship03.y = Phaser.Math.Between(0, game.config.height);
         };
 
         // parallax bg
