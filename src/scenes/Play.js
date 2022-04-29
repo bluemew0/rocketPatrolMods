@@ -47,9 +47,9 @@ class Play extends Phaser.Scene {
         });
 
         // add spaceship (x3)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, "spaceship", 0, 30, 3000).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, "spaceship", 0, 20, 1500).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderUISize*4, "spaceship", 0, 10, 1000).setOrigin(0, 0);
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, "spaceship", 0, 30).setOrigin(0, 0);
+        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, "spaceship", 0, 20).setOrigin(0, 0);
+        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderUISize*4, "spaceship", 0, 10).setOrigin(0, 0);
         this.speedship01 = new Speedship(this, game.config.width + (game.config.width/2), Phaser.Math.Between(borderUISize*4, borderUISize*6 + borderUISize*4), "speedship", 0).setOrigin(0, 0);
 
         // white borders
@@ -138,19 +138,16 @@ class Play extends Phaser.Scene {
 
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
-            this.changeTextColor(this.timer);
             this.changeTextColor(this.scoreLeft);
             this.p1Rocket.reset();
             this.shipExplode(this.ship03);
         }
         if (this.checkCollision(this.p1Rocket, this.ship02)) {
-            this.changeTextColor(this.timer);
             this.changeTextColor(this.scoreLeft);
             this.p1Rocket.reset();
             this.shipExplode(this.ship02);
         }
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
-            this.changeTextColor(this.timer);
             this.changeTextColor(this.scoreLeft);
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
@@ -214,8 +211,10 @@ class Play extends Phaser.Scene {
         this.sound.play("sfx_explosion", {volume: 0.4});
 
         // add to time
-        this.clock.delay += ship.time;
-    }
+        if (ship.time == true) {
+            this.clock.delay += ship.time;
+        }
+    };
 
     changeTextColor(text) {
         // changes the color of the timer

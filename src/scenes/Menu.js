@@ -11,7 +11,7 @@ class Menu extends Phaser.Scene {
         this.load.audio("bg_music", "./assets/04All-of-Us.mp3")
 
         // load title images
-        this.load.image("title", "./assets/title.png");
+        this.load.image("title", "./assets/rocket patrol title.png");
         this.load.image("spaceship", "./assets/spaceship.png");
         this.load.image("starfield-bg", "./assets/starfield-bg.png");
         this.load.image("starfield-stars", "./assets/starfield-stars.png");

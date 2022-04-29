@@ -39,6 +39,16 @@ a:hover {
     color: #e15d5d;
 }
 
+ul {
+    font-family: "Press Start 2P", Consolas;
+    color: white;
+    font-size: 10px;
+    line-height: 20px;
+    padding: 20%;
+    padding-top: 0%;
+    padding-bottom: 0%;
+}
+
 #rocket-patrol-game {
     text-align: center;
     align-content: center;
